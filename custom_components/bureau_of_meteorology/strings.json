@@ -2,22 +2,18 @@
   "config": {
     "step": {
       "user": {
-        "title": "[%key:common::config_flow::title%]",
-        "description": "[%key:common::config_flow::description%]",
-        "data": {
-          "latitude": "[%key:common::config_flow::data::latitude%]",
-          "longitude": "[%key:common::config_flow::data::longitude%]"
-        }
+        "title": "Clever Caravan Weather",
+        "description": "Setting up Clever Caravan Weather using your current Home Zone location."
       },
       "weather_name": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "weather_name": "[%key:common::config_flow::data::weather_name%]"
         }
       },
       "sensors_create": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "observations_create": "[%key:common::config_flow::data::observations_create%]",
@@ -26,7 +22,7 @@
         }
       },
       "observations_monitored": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "observations_basename": "[%key:common::config_flow::data::observations_basename%]",
@@ -34,42 +30,38 @@
         }
       },
       "forecasts_monitored": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "forecasts_basename": "[%key:common::config_flow::data::forecasts_basename%]",
           "forecasts_monitored": "[%key:common::config_flow::data::forecasts_monitored%]",
           "forecasts_days": "[%key:common::config_flow::data::forecasts_days%]"
         }
-      }
-    },
-    "warnings_basename": {
-      "title": "[%key:common::config_flow::title%]",
-      "description": "[%key:common::config_flow::description%]",
-      "data": {
-        "warnings_basename": "[%key:common::config_flow::data::warnings_basename%]"
+      },
+      "warnings_basename": {
+        "title": "Clever Caravan Weather",
+        "description": "[%key:common::config_flow::description%]",
+        "data": {
+          "warnings_basename": "[%key:common::config_flow::data::warnings_basename%]"
+        }
       }
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "[%key:common::config_flow::title%]",
-        "description": "[%key:common::config_flow::description%]",
-        "data": {
-          "latitude": "[%key:common::config_flow::data::latitude%]",
-          "longitude": "[%key:common::config_flow::data::longitude%]"
-        }
+        "title": "Clever Caravan Weather",
+        "description": "Reconfiguring using your current Home Zone location."
       },
       "weather_name": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "weather_name": "[%key:common::config_flow::data::weather_name%]"
         }
       },
       "sensors_create": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "observations_create": "[%key:common::config_flow::data::observations_create%]",
@@ -78,7 +70,7 @@
         }
       },
       "observations_monitored": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "observations_basename": "[%key:common::config_flow::data::observations_basename%]",
@@ -86,25 +78,25 @@
         }
       },
       "forecasts_monitored": {
-        "title": "[%key:common::config_flow::title%]",
+        "title": "Clever Caravan Weather",
         "description": "[%key:common::config_flow::description%]",
         "data": {
           "forecasts_basename": "[%key:common::config_flow::data::forecasts_basename%]",
           "forecasts_monitored": "[%key:common::config_flow::data::forecasts_monitored%]",
           "forecasts_days": "[%key:common::config_flow::data::forecasts_days%]"
         }
-      }
-    },
-    "warnings_basename": {
-      "title": "[%key:common::config_flow::title%]",
-      "description": "[%key:common::config_flow::description%]",
-      "data": {
-        "warnings_basename": "[%key:common::config_flow::data::warnings_basename%]"
+      },
+      "warnings_basename": {
+        "title": "Clever Caravan Weather",
+        "description": "[%key:common::config_flow::description%]",
+        "data": {
+          "warnings_basename": "[%key:common::config_flow::data::warnings_basename%]"
+        }
       }
     }
   },
   "error": {
-    "bad_location": "[%key:common::config_flow::error::bad_location%]",
+    "bad_location": "Could not retrieve weather data for your current Home Zone location. Ensure your Home Zone is set to a location within Australia.",
     "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
     "unknown": "[%key:common::config_flow::error::unknown%]"
   },
