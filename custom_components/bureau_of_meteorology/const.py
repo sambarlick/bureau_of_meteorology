@@ -1,4 +1,4 @@
-"""Constants for the BOM integration."""
+"""Constants for the Clever Caravan Weather integration."""
 
 from typing import Final
 
@@ -34,7 +34,7 @@ CONF_WARNINGS_CREATE: Final = "warnings_create"
 CONF_WARNINGS_BASENAME: Final = "warnings_basename"
 
 COORDINATOR: Final = "coordinator"
-DOMAIN: Final = "bureau_of_meteorology"
+DOMAIN: Final = "clever_caravan_weather"
 
 MAP_CONDITION: Final = {
     "clear": "clear-night",
