@@ -24,20 +24,20 @@ MAX_CACHE_AGE = 86400  # 24 hours in seconds
 
 class Collector:
     """Collector for PyBoM."""
-    
-def __init__(self, latitude, longitude, hass=None):
-    """Init collector."""
-    self.hass = hass
-    self.locations_data = None
-    self.observations_data = None
-    self.daily_forecasts_data = None
-    self.hourly_forecasts_data = None
-    self.warnings_data = None
-    self.geohash7 = geohash_encode(latitude, longitude)
-    self.geohash6 = self.geohash7[:6]
-    self._last_known_location = (latitude, longitude)
-    # Cache storage with timestamps
-    self._cache = {
+
+    def __init__(self, latitude, longitude, hass=None):
+        """Init collector."""
+        self.hass = hass
+        self.locations_data = None
+        self.observations_data = None
+        self.daily_forecasts_data = None
+        self.hourly_forecasts_data = None
+        self.warnings_data = None
+        self.geohash7 = geohash_encode(latitude, longitude)
+        self.geohash6 = self.geohash7[:6]
+        self._last_known_location = (latitude, longitude)
+        # Cache storage with timestamps
+        self._cache = {
             "locations": {"data": None, "timestamp": 0},
             "observations": {"data": None, "timestamp": 0},
             "daily_forecasts": {"data": None, "timestamp": 0},
@@ -85,7 +85,7 @@ def __init__(self, latitude, longitude, hass=None):
                         _LOGGER.error(f"No cached {cache_key} data available")
                         return None
         return None
-    
+
     async def get_locations_data(self):
         """Get JSON location name from BOM API endpoint."""
         headers = {"User-Agent": "MakeThisAPIOpenSource/1.0.0"}
@@ -104,7 +104,7 @@ def __init__(self, latitude, longitude, hass=None):
         if not self.daily_forecasts_data or "data" not in self.daily_forecasts_data:
             _LOGGER.warning("No daily forecast data to format")
             return
-            
+
         days = len(self.daily_forecasts_data["data"])
         for day in range(0, days):
             d = self.daily_forecasts_data["data"][day]
@@ -134,13 +134,12 @@ def __init__(self, latitude, longitude, hass=None):
             else:
                 d["rain_amount_range"] = f"{d['rain_amount_min']}–{d['rain_amount_max']}"
 
-
     async def format_hourly_forecast_data(self):
         """Format forecast data."""
         if not self.hourly_forecasts_data or "data" not in self.hourly_forecasts_data:
             _LOGGER.warning("No hourly forecast data to format")
             return
-            
+
         hours = len(self.hourly_forecasts_data["data"])
         for hour in range(0, hours):
             d = self.hourly_forecasts_data["data"][hour]
@@ -168,47 +167,46 @@ def __init__(self, latitude, longitude, hass=None):
                 d["rain_amount_range"] = f"{d['rain_amount_min']} to {d['rain_amount_max']}"
 
     async def _update_geohash_if_needed(self):
-    """Re-derive geohash from the current home zone location if it has changed."""
-    if self.hass is None:
-        return
+        """Re-derive geohash from the current home zone location if it has changed."""
+        if self.hass is None:
+            return
 
-    home_zone = self.hass.states.get("zone.home")
-    if home_zone is None:
-        _LOGGER.warning("BOM: zone.home not found, keeping existing geohash")
-        return
+        home_zone = self.hass.states.get("zone.home")
+        if home_zone is None:
+            _LOGGER.warning("BOM: zone.home not found, keeping existing geohash")
+            return
 
-    lat = home_zone.attributes.get("latitude")
-    lon = home_zone.attributes.get("longitude")
+        lat = home_zone.attributes.get("latitude")
+        lon = home_zone.attributes.get("longitude")
 
-    if lat is None or lon is None:
-        _LOGGER.warning("BOM: zone.home has no lat/lon attributes, keeping existing geohash")
-        return
+        if lat is None or lon is None:
+            _LOGGER.warning("BOM: zone.home has no lat/lon attributes, keeping existing geohash")
+            return
 
-    if (lat, lon) == self._last_known_location:
-        return  # Location unchanged, nothing to do
+        if (lat, lon) == self._last_known_location:
+            return  # Location unchanged, nothing to do
 
-    _LOGGER.debug(
-        "BOM: Home zone moved to %s,%s — updating geohash", lat, lon
-    )
-    self.geohash7 = geohash_encode(lat, lon)
-    self.geohash6 = self.geohash7[:6]
-    self._last_known_location = (lat, lon)
-    # Clear locations_data so the location name refreshes for the new position
-    self.locations_data = None
-    _LOGGER.info(
-        "BOM: Geohash updated to %s for new home zone location", self.geohash6
-    )
+        _LOGGER.debug(
+            "BOM: Home zone moved to %s,%s — updating geohash", lat, lon
+        )
+        self.geohash7 = geohash_encode(lat, lon)
+        self.geohash6 = self.geohash7[:6]
+        self._last_known_location = (lat, lon)
+        # Clear locations_data so the location name refreshes for the new position
+        self.locations_data = None
+        _LOGGER.info(
+            "BOM: Geohash updated to %s for new home zone location", self.geohash6
+        )
 
+    @Throttle(datetime.timedelta(minutes=5))
+    async def async_update(self):
+        """Refresh the data on the collector object."""
+        await self._update_geohash_if_needed()
 
-@Throttle(datetime.timedelta(minutes=5))
-async def async_update(self):
-    """Refresh the data on the collector object."""
-    await self._update_geohash_if_needed()
+        headers = {"User-Agent": "MakeThisAPIOpenSource/1.0.0"}
 
-    headers = {"User-Agent": "MakeThisAPIOpenSource/1.0.0"}
-    
-    try:
-        async with aiohttp.ClientSession(headers=headers) as session:
+        try:
+            async with aiohttp.ClientSession(headers=headers) as session:
                 # Get location data if not already available
                 if self.locations_data is None:
                     data = await self._fetch_with_retry(
@@ -216,7 +214,7 @@ async def async_update(self):
                     )
                     if data:
                         self.locations_data = data
-                
+
                 # Get observations data
                 data = await self._fetch_with_retry(
                     session, URL_BASE + self.geohash6 + URL_OBSERVATIONS, "observations"
@@ -257,7 +255,7 @@ async def async_update(self):
                 )
                 if data:
                     self.warnings_data = data
-                    
+
         except Exception as err:
             _LOGGER.error(f"Unexpected error during async_update: {err}")
             # Even if we have an unexpected error, we still have our cached data
