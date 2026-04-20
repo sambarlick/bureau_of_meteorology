@@ -3,8 +3,8 @@
   "name": "Clever Caravan Weather",
   "integration_type": "service",
   "config_flow": true,
-  "documentation": "https://github.com/sambarlick/bureau_of_meteorology",
-  "issue_tracker": "https://github.com/sambarlick/bureau_of_meteorology/issues",
+  "documentation": "https://github.com/sambarlick/clever_caravan_weather",
+  "issue_tracker": "https://github.com/sambarlick/clever_caravan_weather/issues",
   "requirements": [
     "iso8601"
   ],
