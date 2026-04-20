@@ -10,7 +10,6 @@ from homeassistant.components.sensor import (
 
 from homeassistant.const import (
     PERCENTAGE,
-    DEGREE,
     UnitOfTemperature,
     UnitOfLength,
     UnitOfSpeed,
