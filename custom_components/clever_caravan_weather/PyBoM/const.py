@@ -1,4 +1,4 @@
-"""Constants for PyBoM."
+"""Constants for PyBoM."""
 
 MAP_MDI_ICON = {
     "clear": "mdi:weather-night",
