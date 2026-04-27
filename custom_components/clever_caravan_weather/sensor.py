@@ -5,7 +5,7 @@ from typing import Any
 
 import iso8601
 import zoneinfo
-import math #Required for calculated observations (e.g dew point)
+import math  # Required for calculated observations (e.g dew point)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.const import (
@@ -71,18 +71,6 @@ async def async_setup_entry(
         CONF_WARNINGS_CREATE, config_entry.data.get(CONF_WARNINGS_CREATE)
     )
 
-    # Station debug sensors — always created when observations are enabled.
-    if create_observations is True:
-        for description in STATION_SENSOR_TYPES:
-            new_entities.append(
-                StationSensor(
-                    hass_data,
-                    observation_basename,
-                    description.key,
-                    description,
-                )
-            )
-
     if create_observations is True:
         observation_basename = config_entry.options.get(
             CONF_OBSERVATIONS_BASENAME,
@@ -104,6 +92,17 @@ async def async_setup_entry(
                         for description in OBSERVATION_SENSOR_TYPES
                         if description.key == observation
                     ][0],
+                )
+            )
+
+        # Station debug sensors — created alongside observations.
+        for description in STATION_SENSOR_TYPES:
+            new_entities.append(
+                StationSensor(
+                    hass_data,
+                    observation_basename,
+                    description.key,
+                    description,
                 )
             )
 
@@ -169,8 +168,8 @@ async def async_setup_entry(
         if warnings_basename is not None:
             new_entities.append(
                 WarningsSensor(
-                    hass_data, 
-                    warnings_basename, 
+                    hass_data,
+                    warnings_basename,
                     "warnings",
                     [
                         description
@@ -341,7 +340,7 @@ class ForecastSensor(SensorBase):
             if (self.sensor_name == "fire_danger") and (self.current_state != None):
                 if self.collector.daily_forecasts_data["data"][self.day]["fire_danger_category"]["default_colour"]:
                     attr["color_fill"] = self.collector.daily_forecasts_data["data"][self.day]["fire_danger_category"]["default_colour"]
-                    attr["color_text"] =  "#ffffff" if (self.collector.daily_forecasts_data["data"][self.day]["fire_danger_category"]["text"] == "Catastrophic") else "#000000"
+                    attr["color_text"] = "#ffffff" if (self.collector.daily_forecasts_data["data"][self.day]["fire_danger_category"]["text"] == "Catastrophic") else "#000000"
             if self.sensor_name.startswith("extended"):
                 attr[ATTR_STATE] = self.collector.daily_forecasts_data["data"][self.day]["extended_text"]
         return attr
@@ -432,15 +431,18 @@ class WarningsSensor(SensorBase):
         """Return the name of the sensor."""
         return f"{self.location_name} {self.sensor_name.replace('_', ' ').title()}"
 
+
 class StationSensor(SensorBase):
-    """Diagnostic sensor exposing the BOM observation station serving this location."""
+    """Sensor exposing the BOM observation station serving this location."""
 
     @property
     def unique_id(self):
+        """Return Unique ID string."""
         return f"{self.location_name}_{self.sensor_name}"
 
     @property
     def state(self):
+        """Return the state of the sensor."""
         station = self.collector.observations_data["data"]["station"]
         if self.sensor_name == "station":
             return station.get("name")
@@ -453,13 +455,16 @@ class StationSensor(SensorBase):
 
     @property
     def extra_state_attributes(self):
+        """Return the state attributes of the sensor."""
         attr = dict(self.collector.observations_data["data"]["station"])
         attr[ATTR_ATTRIBUTION] = ATTRIBUTION
         return attr
 
     @property
     def name(self):
+        """Return the name of the sensor."""
         return f"{self.location_name} {self.sensor_name.replace('_', ' ').title()}"
+
 
 class NowLaterSensor(SensorBase):
     """Representation of a BOM Forecast Sensor."""
@@ -498,8 +503,9 @@ class NowLaterSensor(SensorBase):
         """Return the name of the sensor."""
         return f"{self.location_name} {self.sensor_name.replace('_', ' ').title()}"
 
+
 def calculate_dew_point(temperature, humidity):
-    """Calculate dew point using temperature and humidity observations"""
+    """Calculate dew point using temperature and humidity observations."""
     a, b = 17.27, 237.7  # Tetens equation constants
     saturation_factor = ((a * temperature) / (b + temperature)) + math.log(humidity / 100.0)
     dew_point = (b * saturation_factor) / (a - saturation_factor)
