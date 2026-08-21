@@ -1,4 +1,4 @@
-# 🚐 Clever Caravan Weather
+# Clever Caravan: Weather
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 [![GitHub Release](https://img.shields.io/github/release/sambarlick/clever_caravan_weather.svg?style=for-the-badge)](https://github.com/sambarlick/clever_caravan_weather/releases)
